@@ -11,8 +11,8 @@ let db = new nedb({
 const https = require('https');
 
 const secureServer = https.createServer({
-  key:fs.readFileSync(`/etc/letsencrypt/live/nonplace.site/privkey.pem`),
-  cert:fs.readFileSync(`/etc/letsencrypt/live/nonplace.site/fullchain.pem`)
+  key:fs.readFileSync(`...`),
+  cert:fs.readFileSync(`...`)
 }, app);
 
 
@@ -20,21 +20,23 @@ const io = require('socket.io')(secureServer, {
   pingTimeout: 60000,
 });
 secureServer.listen(443, () => {
-  console.log('secure server started at 5555');
+  console.log('secure server started at 443');
 });
   
   
 app.use(express.static('public'));
 app.set('view engine', 'ejs') ;
-
-app.get('/shared-folder', (req, res, next) => { 
-  res.render("folder.ejs", '');
-});
-
+// pre-req: requires locally installed three:
+app.use("/build/", express.static(path.join(__dirname, 'node_modules/three/build'))); 
+app.use("/examples/", express.static(path.join(__dirname, 'node_modules/three/examples/')));
 const peers = {};
 
-io.on("connection", (socket) => {
-    db.find({}, function (err, docs) {;
+app.get('/shared-folder', (req, res, next) => { 
+  res.render("shared-folder.ejs", '');
+});
+
+io.of("/shared-folder").on("connection", (socket) => {
+  dbSharedFolder.find({}, function (err, docs) {
       socket.emit("existingfiles", docs);
     });
   
@@ -56,7 +58,7 @@ io.on("connection", (socket) => {
             filename: updates.filename,
             mt: updates.mt,
         }
-        db.update(
+        dbSharedFolder.update(
             {"fileInfo.fileid": updates.fileid}, 
             { $set: { "fileInfo.filename": updates.filename, 
                         "fileInfo.mt": updates.mt } }, 
@@ -71,13 +73,13 @@ io.on("connection", (socket) => {
 
     // update on deleted files
     socket.on('deletedfile', (deletedfile)=>{
-      db.find({"fileInfo.fileid": deletedfile}, (err, doc) => {
+      dbSharedFolder.find({"fileInfo.fileid": deletedfile}, (err, doc) => {
         // broadcast the del file
         socket.broadcast.emit("deletedfile", doc[0]);
       });
 
-      db.find({"fileInfo.fileid": deletedfile}, (err, doc) => {
-        db.remove({"fileInfo.fileid":deletedfile}, { multi: true }, function (rmErr, numRemoved) {
+      dbSharedFolder.find({"fileInfo.fileid": deletedfile}, (err, doc) => {
+        dbSharedFolder.remove({"fileInfo.fileid":deletedfile}, { multi: true }, function (rmErr, numRemoved) {
           numRemoved = doc.length;
           // console.log('delete:', numRemoved);
           // db.find({}, function (err, docs) {console.log("left: ", docs.length)});
@@ -91,7 +93,7 @@ io.on("connection", (socket) => {
       // db.find({"fileInfo.fileid": relocFile.id}, (err, doc) => {
       //   console.log("updated:", doc[0].fileInfo.position.x);
       // });
-      db.update({"fileInfo.fileid": relocFile.id}, 
+      dbSharedFolder.update({"fileInfo.fileid": relocFile.id}, 
         { $set: { "fileInfo.position": relocFile.newPosition} }, 
         { multi: true }, 
         function (err, numReplaced){
@@ -110,9 +112,6 @@ io.on("connection", (socket) => {
           socket.broadcast.emit("cursorpeers", gotPosition);
           socket.broadcast.emit("notalone", 'y');
       });
-
-
-
   
     socket.on("disconnect", () => {
       delete peers[socket.id];

@@ -1,11 +1,10 @@
 import * as THREE from "three";
-const socket = io();
-import { OrbitControls } from "https://unpkg.com/three@0.148.0/examples/jsm/controls/OrbitControls.js";
+const socket= io("/shared-folder");
 import { EffectComposer } from 'https://unpkg.com/three@0.148.0/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'https://unpkg.com/three@0.148.0/examples/jsm/postprocessing/RenderPass.js';
 import { GlitchPass } from 'https://unpkg.com/three@0.148.0/examples/jsm/postprocessing/GlitchPass.js';
 import { RenderPixelatedPass } from 'https://unpkg.com/three@0.148.0/examples/jsm/postprocessing/RenderPixelatedPass.js';
-import { MathUtils } from 'three';
+// import { MathUtils } from 'three';
 
 let composer;
 const clock = new THREE.Clock();
@@ -13,9 +12,9 @@ const canvas = document.querySelector(".cursors");
 const WIDTH = window.innerWidth, HEIGHT = window.innerHeight;
 var mouseX, mouseY;
 var curX, curY;
-
 const fov = 50;
 const planeAspectRatio = WIDTH/HEIGHT;
+socket.connect({secure: true});
 
 // scene
 const scene = new THREE.Scene();
@@ -68,7 +67,7 @@ socket.on("cursorpeers", (gotPosition)=>{
 const cursorMat = new THREE.MeshPhongMaterial({
     // transparent: true,
     opacity: 1,
-    color: new THREE.Color("rgba(100,100,100)"),
+    color: new THREE.Color("rgba(200,200,200)"),
     // alphaMap: cursorTex,
     // aoMap: cursorTex,
     // map: cursorTex,
@@ -103,13 +102,14 @@ scene.add(camera);
 // light
 let hemLight, ambLight, dirLight, camLight;
 
-ambLight = new THREE.AmbientLight( "white", 0.9);
+ambLight = new THREE.AmbientLight( "white", 2);
 scene.add(ambLight);
 
-hemLight = new THREE.HemisphereLight( 0xffffbb, 0x080820, 0.9);
+// hemLight = new THREE.HemisphereLight( 0xffffbb, 0x080820, 0.9);
+hemLight = new THREE.HemisphereLight( "white", "white", 0.9);
 scene.add( hemLight );
 
-camLight = new THREE.DirectionalLight( "white", 0.6 );
+camLight = new THREE.DirectionalLight( "white", 1 );
 camLight.lookAt(0,0,0);
 camLight.castShadow = true;
 scene.add( camLight );
@@ -118,9 +118,6 @@ dirLight = new THREE.DirectionalLight( "white", 1);
 dirLight.lookAt(0,0,0);
 dirLight.castShadow = true;
 scene.add( dirLight );
-
-// const helper = new THREE.DirectionalLightHelper( camLight, 5 );
-// scene.add( helper );	
 
 
 // renderer 
@@ -193,8 +190,8 @@ function onPointerMove( event ) {
 
 function loop() {
     const time = Date.now() * 0.0005;
-    const delta = clock.getDelta();
-    var mousePos = Math.abs(mouseY/mouseX);
+    // const delta = clock.getDelta();
+    // var mousePos = Math.abs(mouseY/mouseX);
 
     cursorTex.needsUpdate = true;
 
@@ -202,9 +199,9 @@ function loop() {
     // camLight.position.y = camera.position.y - 50;
     // camLight.position.z = camera.position.z + 20; 
 
-    dirLight.position.x = Math.cos( time * -0.3 ) * 10;
+    // dirLight.position.x = Math.cos( time * -0.3 ) * 10;
     // dirLight.position.y = Math.sin( time * -0.1 ) * 9;
-    dirLight.position.z = Math.cos( time * 0.3 ) * 7;
+    // dirLight.position.z = Math.cos( time * 0.3 ) * 7;
     dirLight.rotation.z = Math.cos( time * 0.6 );
     
     requestAnimationFrame(loop);

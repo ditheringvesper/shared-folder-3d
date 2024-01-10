@@ -1,15 +1,14 @@
 import * as THREE from "three";
-// import { OrbitControls } from "https://unpkg.com/three@0.148.0/examples/jsm/controls/OrbitControls.js";
 import { TrackballControls } from 'https://unpkg.com/three@0.148.0/examples/jsm/controls/TrackballControls.js';
-// import { ArcballControls } from 'https://unpkg.com/three@0.148.0/examples/jsm/controls/ArcballControls.js';
 import { CSS3DRenderer, CSS3DObject } from 'https://unpkg.com/three@0.148.0/examples/jsm/renderers/CSS3DRenderer.js';
-// import { CSS2DRenderer, CSS2DObject } from 'https://unpkg.com/three@0.148.0/examples/jsm/renderers/CSS2DRenderer.js';
+const socket= io("/shared-folder");
+socket.connect({secure: true});
 
 var folderArr = [];
 var selectedFolder = []; // keep it only one slot available
 var foldreToDB = {};
 
-console.log('© 2023 - vesper guo - "www.guoyingzi.com" - @blinkingcaret')
+// console.log('© 2023 - vesper guo - "www.guoyingzi.com" - @blinkingcaret')
 
 const folderFileCtnr = document.querySelector('#folderFileCtnr');
 const folderCtnr = document.querySelector('.folderCtnr');
@@ -17,7 +16,6 @@ const rightclick = document.querySelector('.rightclick');
 const folderCtnrCanvas = document.getElementById( 'folderCtnrCanvas' );
 const bg = document.querySelector('.bg');
 
-var socket = io.connect({secure: true});
 
 var WIDTH = window.innerWidth;
 var HEIGHT = window.innerHeight;
@@ -33,13 +31,20 @@ let css3dControls;
 const clock = new THREE.Clock();
 const windowGroup = new THREE.Group();
 
+
 document.addEventListener('load', socketConnection());
 document.addEventListener('DOMContentLoaded', init());
 animate();
+
 InstructionFolders('hold "shift" to enable camera movement');
 InstructionFolders("press 'r' to reset camera");
 InstructionFolders("if you are stuck, refresh");
 InstructionFolders("right click to create new folder");
+
+const loaderContainer = document.querySelector('.loader-container');
+window.addEventListener('load', () => {
+    loaderContainer.parentElement.removeChild(loaderContainer);
+});
 
 function init(){
     // camera = new THREE.OrthographicCamera( - WIDTH/2, WIDTH/2, HEIGHT/2, - HEIGHT/2 - 1000, 1000 );
@@ -163,7 +168,7 @@ function newWindow(x,y,z,ry, rx){
     var iframe = document.createElement( 'iframe' );
     iframe.style.width = '40em';
     iframe.style.height = '40em';
-    iframe.src = 'https://nonplace.site:5555' //'http://nonplace.site:5555/folder.html';
+    iframe.src = 'https://nonplace.site/shared-folder' //'http://nonplace.site:5555/folder.html';
 
     // preventign iframe loops
     // for(let i = 0; i<= window.frames.length; i++){
@@ -211,33 +216,32 @@ function renderAll(){
     css3Drenderer.render( css3DScene, camera );
 }
 
-function setupRaycast(clientX, clientY) {  
-    pointer = new THREE.Vector2();
+// function setupRaycast(clientX, clientY) {  
+//     pointer = new THREE.Vector2();
 
-    // three.js expects 'normalized device coordinates' (i.e. between -1 and 1 on both axes)
-    pointer.x = (clientX / window.innerWidth) * 2 - 1;
-    pointer.y = -(clientY / window.innerHeight) * 2 + 1;
+//     // three.js expects 'normalized device coordinates' (i.e. between -1 and 1 on both axes)
+//     pointer.x = (clientX / window.innerWidth) * 2 - 1;
+//     pointer.y = -(clientY / window.innerHeight) * 2 + 1;
   
-    raycaster.setFromCamera(pointer, camera);
-    const intersects = raycaster.intersectObject(boxMesh);
+//     raycaster.setFromCamera(pointer, camera);
+//     const intersects = raycaster.intersectObject(boxMesh);
   
-    if (intersects.length) {
-    let point = intersects[0].point;
-    return point;
-        
-    }
-}
+//     if (intersects.length) {
+//     let point = intersects[0].point;
+//     return point;
+//     }
+// }
 
 // constructor of a 3d icon 
-function css3dIcon( id, x, y, z) {
-    var new3dIcon = new CSS3DObject( document.querySelector(`#${id}`) );
-    new3dIcon.position.set(0,0,0);
-    new3dIcon.scale.set(3,3,3);
-    css3DScene.add(new3dIcon);
-    // console.log('new3dicon:', new3dIcon);
-    filegoup.add(new3dIcon);
-    animate();
-}
+// function css3dIcon( id, x, y, z) {
+//     var new3dIcon = new CSS3DObject( document.querySelector(`#${id}`) );
+//     new3dIcon.position.set(0,0,0);
+//     new3dIcon.scale.set(3,3,3);
+//     css3DScene.add(new3dIcon);
+//     // console.log('new3dicon:', new3dIcon);
+//     filegoup.add(new3dIcon);
+//     animate();
+// }
 
 
 // draw 3js on canvas elements
