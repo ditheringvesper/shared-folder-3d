@@ -1,0 +1,199 @@
+/* :root {} */
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+body {
+    /* cursor: wait; */
+    font-family: Helvetica;
+    background-color: white;
+}
+.bg{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    background-color: #A5A5A5;
+    z-index: -1;
+    /* cursor: help; */
+    pointer-events: none;
+
+}
+.cursors{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    inset:0;
+    /* z-index: 10; */
+    pointer-events: none;
+}
+  
+
+.folderCtnr{
+    inset: 0;
+    margin: auto;
+    padding: 0;
+    position: fixed;
+    cursor: default;
+    background-color: #d8d8d8;
+    border-radius: 10px;
+    width: 40em;
+    height: 40em;
+    box-shadow: 2px 2px 20px 3px grey inset;
+
+    z-index: 2;
+    overflow: hidden;
+    text-align: center;
+}
+
+#folderCtnrCanvas{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    z-index: 99;
+}
+
+.rightclick{
+    z-index: 9;
+    /* display: block; */
+    position: absolute;
+    inset: 0;
+    width: 150px;
+    height: 1.5em;
+    border-radius: 6px;
+    background-color: #A5A5A5;
+    visibility: hidden;
+    overflow: hidden;
+}
+.rightclick span{
+    margin-left: 1em;
+    padding: 0.6em;
+    font-size: 0.8em;
+    margin: auto;
+    vertical-align: baseline;
+}
+.rightclick span:hover{
+    color: white;
+}
+.rightclick:hover{
+    background-color: rgb(186, 112, 186);
+}
+
+/* ------- iframe div ---------*/
+.iframeDiv {
+    overflow: scroll;
+    text-align: center;
+    display: flex;
+}
+iframe{
+    display: flex;
+    position: relative;
+    /* width: 10%; */
+    height: auto;
+    border: 1px;
+}
+
+/* ------- new folder icon ---------*/
+.folderIconStyle{
+    width: 60px;
+    height: 70px;
+    text-align: center;
+    /* background-color: blue; */
+    z-index: 5;
+    display: table-cell;
+    border-collapse: separate;
+    border:0;
+    border-spacing: 10px;
+    position: absolute; /* damn this line is crucial ... :((((( */
+}
+.folder-selected > img{
+    padding: 3px;
+    border: white 1px solid;
+    pointer-events: none;
+}
+.folder-selected > p {
+    background-color: rgb(186, 112, 186);
+    /* overflow: visible; */
+    -webkit-box-orient: vertical;
+    display: block;
+    text-overflow: none;
+    height: fit-content;
+    max-height: fit-content;
+    border:none;
+}
+.folderIconStyle p:focus{
+    background-color: rgb(186, 112, 186);
+    /* overflow: visible; */
+    display: block;
+    -webkit-box-orient: vertical;
+    text-overflow: none;
+    height: fit-content;
+    max-height: fit-content;
+    border:none;
+}
+.folderIconStyle img{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 0.2em;
+    position: relative;
+    z-index: 5;
+    width: 90%;
+    pointer-events: none;
+    box-sizing: border-box;
+}
+.folderIconStyle p{
+    text-align: center;
+    padding: 0.1em;
+    font-size: 0.8em;
+    letter-spacing: 0.05em;
+    color: white;
+    inset: 0;
+    margin: auto;
+    max-width: 60px;
+    max-height: 255ch; /* max letters */
+    overflow-wrap: break-word; 
+    display: -webkit-box;
+    overflow-y: hidden;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    text-shadow: 1px 1px 4px black;
+    background-color: transparent;
+    /* pointer-events: none; */
+}
+
+
+
+/* ------- input tag option ----------------*/ 
+.folderIconStyle input{
+    border: none;
+    background-color: transparent;
+    text-align: center;
+    color: white;
+    inset: 0;
+    display: block;
+    margin: auto;
+    width: 100%;
+    height: 2.5em;
+    text-shadow: 1px 1px 5px black;
+    color: white;
+    box-sizing: border-box;
+}
+.folderIconStyle input::placeholder {
+    inset:0;
+    padding: 0;
+    margin: 0;
+    text-shadow: 1px 1px 5px black;
+    border: none;
+    color: white;
+    font-size: 1em;
+    white-space: pre-line;
+  }
+
+.folderIconStyle input:focus {
+    border: none;
+    color: white;
+    background-color: rgb(186, 112, 186);
+  }
+

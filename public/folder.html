@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<!-- <html lang='en'> -->
+
+<head>
+    <meta charset='utf-8' />
+    <title>.../Users/Me/Desktop</title>
+    <link rel="stylesheet" href="/folder.css">
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+
+<body>
+    <script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
+    <script type="importmap">
+        {
+          "imports": {
+            "three": "https://unpkg.com/three@0.148.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.148.0/examples/jsm/"
+          }
+        }
+    </script>    
+    <script type="module" src="folder.js"></script>
+    <script type="module" src="cursorpeer.js"></script>
+
+    <div class="bg"></div>
+    <!-- <div id="folderCtnrCanvas" class="folderInterior3D"></div> -->
+
+    <div class="folderCtnr"> 
+        <div class='folderIconStyle' id="folderFileCtnr" style="visibility: hidden;">
+            <img src="/media/img/folder-icon.png">
+            <p id='filename'> untitled folder </p>
+
+            <!-- <input id='filename' type="text" placeholder="untitled folder"> -->
+        </div>
+        <div class="rightclick"> <span> New Folder </span></div>
+
+    </div>
+
+	<canvas class = "cursors"> </canvas>
+        <canvas class = "cursorLayer" style="visibility:hidden;"></canvas>
+            <img id="curImg" src="/media/img/cursor.png" style="visibility:hidden; width:30px;">
+    
+    <!-- <script type="module" src="../folder-3js-portion.js"></script> -->
+
+</body>
+
+</html>

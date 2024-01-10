@@ -1,0 +1,20 @@
+{
+  "dependencies": {
+    "ejs": "^3.1.9",
+    "expess": "^0.0.1-security",
+    "express": "^4.18.2",
+    "nedb": "^1.8.0",
+    "nodemon": "^3.0.2",
+    "openssl": "^2.0.0",
+    "socket.io": "^4.6.1"
+  },
+  "name": "3js_shared-dir-with-db",
+  "version": "1.0.0",
+  "description": "a three.js version prototyping the nonplace.site project",
+  "main": "server-3js-shared-dir.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "vespee",
+  "license": "ISC"
+}

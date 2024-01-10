@@ -1,0 +1,136 @@
+/* :root {} */
+
+body {
+    /* cursor: wait; */
+    font-family: Helvetica;
+    background-color: white;
+}
+.bg{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    cursor: help;
+}
+  
+
+.folderCtnr{
+    inset: 0;
+    margin: auto;
+    padding: 0;
+    position: fixed;
+    z-index: 2;
+    cursor: default;
+    background-color: #d8d8d8;
+    border-radius: 10px;
+    width: 50em;
+    height: 40em;
+
+    overflow: hidden;
+}
+
+.rightclick{
+    z-index: 9;
+    /* display: block; */
+    position: absolute;
+    inset: 0;
+    width: 150px;
+    height: 1.5em;
+    border-radius: 6px;
+    background-color: #A5A5A5;
+    visibility: hidden;
+    overflow: hidden;
+}
+.rightclick span{
+    margin-left: 1em;
+    padding: 0.6em;
+    font-size: 0.8em;
+    margin: auto;
+    vertical-align: baseline;
+}
+.rightclick span:hover{
+    color: white;
+}
+.rightclick:hover{
+    background-color: rgb(186, 112, 186);
+}
+
+/* ------- new folder icon ---------*/
+.folderIconStyle{
+    width: 50px;
+    height: 70px;
+    /* background-color: blue; */
+    z-index: 5;
+    display: table-cell;
+    border-collapse: separate;
+    border:0;
+    border-spacing: 10px;
+    position: absolute; /* damn this line is crucial ... :((((( */
+}
+.folder-selected img{
+    padding: 3px;
+    border: white 1px solid;
+    pointer-events: none;
+}
+.folder-selected  > p {
+    background-color: rgb(186, 112, 186);
+}
+.folderIconStyle img{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 0.2em;
+    position: relative;
+    z-index:5;
+    width: 100%;
+    pointer-events: none;
+    box-sizing: border-box;
+}
+.folderIconStyle p{
+    text-align: center;
+    font-size: 0.8em;
+    letter-spacing: 0.05em;
+    color: white;
+    inset: 0;
+    display: block;
+    margin: auto;
+    width: 100%;
+    height: auto;
+    text-shadow: 1px 1px 5px black;
+    color: white;
+    background-color: transparent;
+    /* pointer-events: none; */
+}
+
+
+/* ------- input tag option ----------------*/ 
+.folderIconStyle input{
+    border: none;
+    background-color: transparent;
+    text-align: center;
+    color: white;
+    inset: 0;
+    display: block;
+    margin: auto;
+    width: 100%;
+    height: 2.5em;
+    text-shadow: 1px 1px 5px black;
+    color: white;
+    box-sizing: border-box;
+}
+.folderIconStyle input::placeholder {
+    inset:0;
+    padding: 0;
+    margin: 0;
+    text-shadow: 1px 1px 5px black;
+    border: none;
+    color: white;
+    font-size: 1em;
+    white-space: pre-line;
+  }
+
+.folderIconStyle input:focus {
+    border: none;
+    color: white;
+    background-color: rgb(186, 112, 186);
+  }
+
