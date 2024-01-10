@@ -1,18 +1,13 @@
 const express = require('express');
 const app = express();
 const fs=require('fs');
-const path=require('path');
 
 const nedb = require('nedb');
 let db = new nedb({
     filename: 'dir-database.db',
     autoload: true
 })
-db.find({}, function (err, docs) {
-    // console.log("# of database entries:", docs.length);
-  });
   
-// const http = require("http").createServer(app);
 const https = require('https');
 
 const secureServer = https.createServer({
@@ -24,71 +19,33 @@ const secureServer = https.createServer({
 const io = require('socket.io')(secureServer, {
   pingTimeout: 60000,
 });
-secureServer.listen(5555, () => {
+secureServer.listen(443, () => {
   console.log('secure server started at 5555');
 });
   
   
-const peers = {};
-
 app.use(express.static('public'));
 app.set('view engine', 'ejs') ;
 
-// app.use(urlEncodedParser)
-// const multer = require('multer')
-// const bodyParser = require('body-parser')
-// const urlEncodedParser = bodyParser.urlencoded({extended: true})
-// const upload = multer({
-//     dest: 'public/uploads'
-// })
-
-
-app.get('/', (req, res, next) => { // 'next' means run next request after this; 
+app.get('/shared-folder', (req, res, next) => { 
   res.render("folder.ejs", '');
 });
 
-// app.get('/js', (req, res, next) => { // 'next' means run next request after this; 
-//   res.sendFile("public/folder.js", {root: __dirname});
-// });
+const peers = {};
 
 io.on("connection", (socket) => {
-    // console.log(
-    //   "new visitor id: ",
-    //   socket.id
-    // );
-    db.find({}, function (err, docs) {
-      // console.log(
-      //   "Sending",
-      //   docs.length,
-      //   "existing database entries to new client"
-      // );
+    db.find({}, function (err, docs) {;
       socket.emit("existingfiles", docs);
     });
   
     peers[socket.id] = {};
   
-    // console.log("Current peers:", peers);
-    // filename
-
     socket.on("createdfiles", (data) => {
       let newFilename = { 
         user: socket.id, 
         fileInfo: data, 
         };
       socket.broadcast.emit("createdfiles", newFilename);
-
-      db.find({"fileInfo.fileid":'newFilename.fileInfo.fileid'}, (err, doc) => {
-          if(doc){
-            // console.log("this is new");
-            db.insert(newFilename, (err, doc) => {
-              // console.log("newFilename:", doc);
-            });
-          }
-          else{
-            // console.log('exsiting folder')
-          }
-      });
-    });
 
 
     // targeted file object; also call this when a new file is created
@@ -99,9 +56,6 @@ io.on("connection", (socket) => {
             filename: updates.filename,
             mt: updates.mt,
         }
-        // db.find({"fileInfo.fileid":'updates.fileid'}, (err, doc) => {
-        //   console.log("updated:", doc._id);
-        // });
         db.update(
             {"fileInfo.fileid": updates.fileid}, 
             { $set: { "fileInfo.filename": updates.filename, 
@@ -111,10 +65,7 @@ io.on("connection", (socket) => {
                 // console.log(numReplaced, "updated:",updates.filename);
             }
             );
-
         socket.broadcast.emit("updateFileInfo", updatedInfo);
-        // console.log(updatedInfo);
-
       });
 
 
@@ -123,10 +74,8 @@ io.on("connection", (socket) => {
       db.find({"fileInfo.fileid": deletedfile}, (err, doc) => {
         // broadcast the del file
         socket.broadcast.emit("deletedfile", doc[0]);
-        // console.log('broadcasting delete:', doc[0]);
       });
 
-      // let delRegex = new RegExp(deletedfile);
       db.find({"fileInfo.fileid": deletedfile}, (err, doc) => {
         db.remove({"fileInfo.fileid":deletedfile}, { multi: true }, function (rmErr, numRemoved) {
           numRemoved = doc.length;
@@ -151,9 +100,6 @@ io.on("connection", (socket) => {
         });
     });
       
-    
-
-
     // see each one's cursor
     socket.on("cursorpeers", (data) => {
         let gotPosition = { 
@@ -169,9 +115,8 @@ io.on("connection", (socket) => {
 
   
     socket.on("disconnect", () => {
-      // console.log("Someone with ID", socket.id, "left the server");
       delete peers[socket.id];
       socket.broadcast.emit("notalone", 'n');
     });
   });
-
+});
